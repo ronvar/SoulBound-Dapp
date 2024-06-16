@@ -79,9 +79,9 @@ export const getContract = (
   return new ethers.Contract(contractAddress, soulBoundABI, provider);
 };
 
-export const getContractMintingEvents = async (toWalletAddress?: string): Promise<
-  NftEventWithMetadata[]
-> => {
+export const getContractMintingEvents = async (
+  toWalletAddress?: string
+): Promise<NftEventWithMetadata[]> => {
   const provider = getProvider();
   const contract = getContract(provider);
   const filter = contract.filters.Transfer(null, toWalletAddress); // filter for all Transfer events
@@ -105,19 +105,14 @@ export const getContractMintingEvents = async (toWalletAddress?: string): Promis
     });
   }
 
-  console.log("eventsWithMetadata", eventsWithMetadata)
   return eventsWithMetadata;
 };
 
 export const fetchTokenDetailsByWalletAddress = async (
   userAddress?: string
-): Promise<BigNumber[]> => {
-  // Extract tokenId from event args
+): Promise<NftEventWithMetadata[]> => {
   const mintedTokens = await getContractMintingEvents(userAddress);
-  const tokenIds = mintedTokens
-    .map((tokens) => tokens.tokenId)
-    .filter((tokenId) => tokenId !== null); // Filter out any null values
-  return [...new Set(tokenIds)] as BigNumber[]; // remove duplicates in case of transfers
+  return mintedTokens;
 };
 
 export const mintToken = async (
