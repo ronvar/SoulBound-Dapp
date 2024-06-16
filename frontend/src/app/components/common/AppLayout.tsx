@@ -11,8 +11,9 @@ import {
   createStyles,
   useMantineTheme,
 } from "@mantine/core";
-import { useRouter } from "next/router";
 import { useShallowEffect } from "@mantine/hooks";
+
+const GENERIC_LOGO = "https://cryptologos.cc/logos/polygon-matic-logo.png";
 
 const useStyles = createStyles(() => ({
   genericHeader: {
@@ -33,10 +34,10 @@ const GenericHeader = () => {
       <div className={classes.genericHeader}>
         <Anchor href="/">
           <Image
-            src="/app_logo.png"
+            src={GENERIC_LOGO}
             height={40}
             width={46}
-            alt="bello logo"
+            alt="logo"
             draggable={false}
           />
         </Anchor>
@@ -62,7 +63,6 @@ const Layout = ({
   image?: string;
 }) => {
   const theme = useMantineTheme();
-  const router = useRouter();
   const [ready, setReady] = useState(false);
   const { classes } = useStyles();
 
@@ -86,15 +86,19 @@ const Layout = ({
         navbar={ready ? sidebar : undefined}
         styles={(theme) => ({
           main: {
+            maxWidth: `calc(100% - 100px)`,
             minHeight: `calc(100vh - ${headerToolbar ? 72 : 88}px)`,
             paddingLeft: !sidebar ? theme.spacing.md : undefined
           },
+          
         })}
       >
         {ready && (
-          <Container className="position-relative" size={size} px={0}>
+          <Box w={"100%"} maw={"100%"} pl={100} style={{
+            position: "relative",
+          }}>
             <Center>{children}</Center>
-          </Container>
+          </Box>
         )}
       </AppShell>
     </Container>
