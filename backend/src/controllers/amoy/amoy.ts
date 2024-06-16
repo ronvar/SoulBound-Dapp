@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { ethers, JsonRpcProvider } from "ethers";
+import { ethers } from "ethers";
 
 const soulBoundABI = require("./soulbound.json");
 const contractAddress = "0xA57CC3065E049d50D4f2D10F614FCfA6A8CA8eb5";
@@ -43,10 +43,30 @@ EventLog {
 */
 
 export const getProvider = () => {
-  return new JsonRpcProvider(amoyTestnetRpcUrl);
+  return new ethers.providers.JsonRpcProvider(amoyTestnetRpcUrl);
 };
 
-export const getContract = (provider: ethers.JsonRpcApiProvider) => {
+export const getWallet = (
+  provider: ethers.providers.JsonRpcProvider,
+  walletAddress: string
+) => {
+  return new ethers.Wallet(walletAddress, provider);
+};
+
+export const getSigner = (
+  provider: ethers.providers.JsonRpcProvider,
+  userWallet: ethers.Wallet
+) => {
+  if (!userWallet) {
+    throw new Error("User address is required");
+  }
+
+  return provider.getSigner(userWallet.privateKey);
+};
+
+export const getContract = (
+  provider: ethers.providers.JsonRpcProvider | ethers.providers.JsonRpcSigner
+) => {
   return new ethers.Contract(contractAddress, soulBoundABI, provider);
 };
 
@@ -68,7 +88,7 @@ export const fetchTokenIds = async (
   // Extract tokenId from event args
   const tokenIds = events
     .map((event) => {
-      const eventLog = event as ethers.EventLog;
+      const eventLog = event as ethers.Event;
       const tokenId =
         eventLog.args && (eventLog.args[2] as BigNumber) >= new BigNumber(0)
           ? (eventLog.args[2] as BigNumber)
@@ -77,4 +97,55 @@ export const fetchTokenIds = async (
     })
     .filter((tokenId) => tokenId !== null); // Filter out any null values
   return [...new Set(tokenIds)]; // remove duplicates in case of transfers
+};
+
+export const mintToken = async (
+  walletAddress: string,
+  signature: string,
+  message: string
+) => {
+  if (!walletAddress || !signature || !message) {
+    throw new Error("Wallet address, signature and message are required");
+  }
+
+  const isValidSignature =
+    ethers.utils.verifyMessage(message, signature) ===
+    walletAddress.toLowerCase();
+
+  if (!isValidSignature) {
+    throw new Error("Invalid signature");
+  }
+
+  const provider = getProvider();
+  const contract = getContract(provider);
+
+  const nonce = await provider.getTransactionCount(walletAddress);
+  const gasPrice = await provider.getGasPrice();
+  const gasLimit = await contract.estimateGas.safeMint(walletAddress);
+
+  const tx = {
+    to: contractAddress,
+    nonce,
+    gasLimit,
+    gasPrice,
+    data: contract.interface.encodeFunctionData("safeMint", [walletAddress]),
+  };
+
+  const signedTx = await provider.send("eth_sendRawTransaction", [tx]);
+  const sentTx = await provider.sendTransaction(signedTx);
+  const receipt = await sentTx.wait();
+
+  // Extract tokenId from event args in the receipt
+  const event = receipt.logs
+    .map((log) => contract.interface.parseLog(log))
+    .find(
+      (parsedLog) =>
+        parsedLog.name === "Transfer" &&
+        parsedLog.args.to.toLowerCase() === walletAddress.toLowerCase()
+    );
+
+  const tokenId = event ? (event.args?.[2] as BigNumber).toNumber() : null;
+  const transactionHash = receipt.transactionHash;
+  const gasUsed = receipt.gasUsed;
+  return { tokenId, transactionHash, gasUsed };
 };
