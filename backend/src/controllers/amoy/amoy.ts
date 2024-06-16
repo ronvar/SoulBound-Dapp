@@ -5,6 +5,15 @@ const soulBoundABI = require("./soulbound.json");
 const contractAddress = "0xA57CC3065E049d50D4f2D10F614FCfA6A8CA8eb5";
 const amoyTestnetRpcUrl = "https://rpc-amoy.polygon.technology";
 
+export type NftEventWithMetadata = {
+  from: string;
+  to: string;
+  transactionHash: string;
+  tokenId: BigNumber;
+  timestamp: number;
+  ownerAddress: string;
+};
+
 /* EVENT LOG EXAMPLE 
 EventLog {
     provider: JsonRpcProvider {},
@@ -70,33 +79,45 @@ export const getContract = (
   return new ethers.Contract(contractAddress, soulBoundABI, provider);
 };
 
-export const fetchTokenURI = async (
-  contract: ethers.Contract,
-  tokenId: number | BigNumber
-) => {
-  const tokenURI = await contract.tokenURI(tokenId);
-  return tokenURI;
-};
-
-export const fetchTokenIds = async (
-  contract: ethers.Contract,
-  userAddress?: string
-) => {
-  const filter = contract.filters.Transfer(null, userAddress); // filter for all Transfer events
+export const getContractMintingEvents = async (toWalletAddress?: string): Promise<
+  NftEventWithMetadata[]
+> => {
+  const provider = getProvider();
+  const contract = getContract(provider);
+  const filter = contract.filters.Transfer(null, toWalletAddress); // filter for all Transfer events
   const events = await contract.queryFilter(filter);
 
+  // get transaction hash, block number, and timestamp
+  let eventsWithMetadata: NftEventWithMetadata[] = [];
+  for (const event of events) {
+    const transactionHash = event.transactionHash;
+    const tokenId = event.args?.["tokenId"];
+    const ownerWalletAddress = await contract.ownerOf(tokenId);
+    const block = await provider.getBlock(event.blockNumber);
+
+    eventsWithMetadata.push({
+      timestamp: block.timestamp,
+      ownerAddress: ownerWalletAddress,
+      transactionHash,
+      tokenId,
+      from: event.args?.from,
+      to: event.args?.to,
+    });
+  }
+
+  console.log("eventsWithMetadata", eventsWithMetadata)
+  return eventsWithMetadata;
+};
+
+export const fetchTokenDetailsByWalletAddress = async (
+  userAddress?: string
+): Promise<BigNumber[]> => {
   // Extract tokenId from event args
-  const tokenIds = events
-    .map((event) => {
-      const eventLog = event as ethers.Event;
-      const tokenId =
-        eventLog.args && (eventLog.args[2] as BigNumber) >= new BigNumber(0)
-          ? (eventLog.args[2] as BigNumber)
-          : null;
-      return tokenId;
-    })
+  const mintedTokens = await getContractMintingEvents(userAddress);
+  const tokenIds = mintedTokens
+    .map((tokens) => tokens.tokenId)
     .filter((tokenId) => tokenId !== null); // Filter out any null values
-  return [...new Set(tokenIds)]; // remove duplicates in case of transfers
+  return [...new Set(tokenIds)] as BigNumber[]; // remove duplicates in case of transfers
 };
 
 export const mintToken = async (
