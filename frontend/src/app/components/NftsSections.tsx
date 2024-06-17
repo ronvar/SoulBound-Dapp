@@ -74,7 +74,7 @@ export const NftsSection: React.FC<NftsSectionProps> = ({ type }) => {
         } Minted NFTs`}</Text>
       </Center>
       <Group position="right" py={16}>
-        {isAuthenticated && !primaryWallet && (
+        {isAuthenticated && !primaryWallet && type === "user" && (
           <Button onClick={onConnectNewWallet} h={40}>
             Connect Wallet
           </Button>
