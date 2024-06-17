@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@mantine/hooks";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
+/* Handles screen size and device type */
 const useScreenSize = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isTablet, setIsTablet] = useState<boolean>(false);

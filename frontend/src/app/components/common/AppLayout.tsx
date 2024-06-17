@@ -1,17 +1,16 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import {
   Anchor,
   AppShell,
   Box,
   Center,
   Container,
-  Divider,
   Header,
   Image,
   createStyles,
-  useMantineTheme,
 } from "@mantine/core";
 import { useShallowEffect } from "@mantine/hooks";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 const GENERIC_LOGO = "https://cryptologos.cc/logos/polygon-matic-logo.png";
 
@@ -21,7 +20,7 @@ const useStyles = createStyles(() => ({
     alignItems: "center",
     height: "100%",
     justifyContent: "space-between",
-    paddingRight: 80,
+    paddingRight: 20,
     paddingLeft: 20,
   },
 }));
@@ -41,7 +40,7 @@ const GenericHeader = () => {
             draggable={false}
           />
         </Anchor>
-        <div style={{ width: "10%" }} />
+        <DynamicWidget />
       </div>
     </Header>
   );
@@ -51,7 +50,6 @@ const Layout = ({
   children,
   headerToolbar,
   sidebar,
-  size,
 }: {
   children: any;
   headerToolbar?: JSX.Element;
@@ -62,9 +60,7 @@ const Layout = ({
   description?: string;
   image?: string;
 }) => {
-  const theme = useMantineTheme();
   const [ready, setReady] = useState(false);
-  const { classes } = useStyles();
 
   useShallowEffect(() => {
     setReady(true);

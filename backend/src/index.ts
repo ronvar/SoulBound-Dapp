@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { config } from "dotenv";
 import user from "./controllers/user/index";
+import auth from "./controllers/auth/index";
 
 config();
 
@@ -23,6 +24,7 @@ const corsOptions: cors.CorsOptions = {
 };
 app.use(cors(corsOptions));
 app.use("/user", user)
+app.use("/verify", auth);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
@@ -33,16 +35,3 @@ const server = app.listen(port, () => {
 });
 
 server.timeout = 120000;
-
-const test = async () => {
-  const totalSupply = await fetchTokenDetailsByWalletAddress();
-  
-  const userTokens = await fetchTokenDetailsByWalletAddress(
-    "0x754e49da4978bd9FF2e9Bfddd9399898FbB3dEc3"
-  );
-
-  console.log("tokenIds", totalSupply);
-  console.log("user tokens", userTokens);
-};
-
-test();

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Stack, createStyles, useMantineTheme } from "@mantine/core";
-import useScreenSize from "@/app/hooks/useScreenSize";
 import { PageSectionId, PageSections, SectionType } from "@/types/pageTypes";
 import { useAtom } from "jotai";
 import { selectedPageSectionAtom } from "@/atoms/pageAtoms";
+import useScreenSize from "@/hooks/useScreenSize";
 
 type SettingsSidebarSection = {
   label: string;

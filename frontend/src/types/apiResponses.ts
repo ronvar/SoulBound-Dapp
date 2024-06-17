@@ -1,8 +1,13 @@
-import { ChainId } from "./chains";
-import { SimpleHashNFTResponse } from "./simplehash";
+export type NftEventWithMetadata = {
+    from: string;
+    to: string;
+    transaction_hash: string;
+    token_id: string;
+    timestamp: number;
+    owner_address: string;
+  };
 
 export type MintedTokensResponse = {
     wallet_ddress: string,
-    chain_id: ChainId,
-    tokens: SimpleHashNFTResponse[] | null,
+    tokens: NftEventWithMetadata[],
   }

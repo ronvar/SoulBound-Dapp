@@ -9,14 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@dynamic-labs/ethereum": "^2.1.4",
-    "@dynamic-labs/sdk-react-core": "^2.1.4",
+    "@dynamic-labs/ethereum": "1.1.0-alpha.13",
+    "@dynamic-labs/sdk-react-core": "^1.1.0-alpha.13",
     "@emotion/react": "^11.11.4",
     "@mantine/core": "^6.0.19",
     "@mantine/hooks": "^6.0.19",
     "@mantine/next": "^6.0.21",
+    "bignumber.js": "^9.1.2",
     "dotenv": "^16.4.5",
     "jotai": "^2.8.3",
+    "lodash.isequal": "^4.5.0",
     "next": "14.2.4",
     "pino": "^9.2.0",
     "react": "^18",
@@ -24,6 +26,7 @@
     "viem": "^2.14.1"
   },
   "devDependencies": {
+    "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

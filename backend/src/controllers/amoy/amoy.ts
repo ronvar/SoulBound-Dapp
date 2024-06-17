@@ -1,18 +1,10 @@
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
+import { NftEventWithMetadata } from "../../types/amoy";
 
 const soulBoundABI = require("./soulbound.json");
 const contractAddress = "0xA57CC3065E049d50D4f2D10F614FCfA6A8CA8eb5";
 const amoyTestnetRpcUrl = "https://rpc-amoy.polygon.technology";
-
-export type NftEventWithMetadata = {
-  from: string;
-  to: string;
-  transactionHash: string;
-  tokenId: BigNumber;
-  timestamp: number;
-  ownerAddress: string;
-};
 
 /* EVENT LOG EXAMPLE 
 EventLog {
@@ -115,18 +107,27 @@ export const fetchTokenDetailsByWalletAddress = async (
   return mintedTokens;
 };
 
+export const verifySignature = (message: string, signature: string) => {
+  const messageHash = ethers.utils.hashMessage(message);
+  const signerAddress = ethers.utils.recoverAddress(messageHash, signature);
+  return signerAddress.toLowerCase();
+};
+
 export const mintToken = async (
   walletAddress: string,
   signature: string,
   message: string
-) => {
+): Promise<NftEventWithMetadata> => {
   if (!walletAddress || !signature || !message) {
     throw new Error("Wallet address, signature and message are required");
   }
 
-  const isValidSignature =
-    ethers.utils.verifyMessage(message, signature) ===
-    walletAddress.toLowerCase();
+  let isValidSignature = false;
+  try {
+    isValidSignature = verifySignature(message, signature) === walletAddress.toLowerCase();
+  } catch (error) {
+    console.error("Error verifying signature:", error);
+  }
 
   if (!isValidSignature) {
     throw new Error("Invalid signature");
@@ -150,18 +151,22 @@ export const mintToken = async (
   const signedTx = await provider.send("eth_sendRawTransaction", [tx]);
   const sentTx = await provider.sendTransaction(signedTx);
   const receipt = await sentTx.wait();
-
-  // Extract tokenId from event args in the receipt
-  const event = receipt.logs
-    .map((log) => contract.interface.parseLog(log))
-    .find(
-      (parsedLog) =>
-        parsedLog.name === "Transfer" &&
-        parsedLog.args.to.toLowerCase() === walletAddress.toLowerCase()
-    );
-
-  const tokenId = event ? (event.args?.[2] as BigNumber).toNumber() : null;
   const transactionHash = receipt.transactionHash;
-  const gasUsed = receipt.gasUsed;
-  return { tokenId, transactionHash, gasUsed };
+
+  const newEvents = await getContractMintingEvents(walletAddress);
+  const matchingEvent = newEvents.find(
+    (event) => event.transactionHash === transactionHash
+  );
+
+  if (!matchingEvent) {
+    throw new Error("Transaction failed");
+  }
+  
+  return matchingEvent;
 };
+
+export const getGasPriceEstimate = async () => {
+  const provider = getProvider();
+  const gasPrice = await provider.getGasPrice();
+  return gasPrice;
+}
