@@ -14,6 +14,8 @@ This is a full stack application meant to interact with the Polygon Amoy testnet
 
 ![App Screenshot](https://github.com/ronvar/SoulBound-Dapp/assets/31808077/adac3799-da55-4859-b69d-44522ffaf57e)
 
+![App Screenshot](https://github.com/ronvar/SoulBound-Dapp/assets/31808077/59598a93-3623-49fc-a13f-6b20602cd452)
+
 ![App Screenshot](https://github.com/ronvar/SoulBound-Dapp/assets/31808077/00169fc5-0d99-4409-8e56-86b3bf404360)
 
 ![App Screenshot](https://github.com/ronvar/SoulBound-Dapp/assets/31808077/1ccd7cee-0c65-453f-8b3b-0e8d11395ecf)
