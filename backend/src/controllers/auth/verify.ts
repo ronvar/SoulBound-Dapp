@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import jwt from "jsonwebtoken";
 import { User } from "../../types/user";
-import { getUser, insertNewUser } from "./user";
+import { getUser, insertNewUser } from "../../services/dataSources/user/user";
 config();
 
 const DYNAMIC_PUBLIC_KEY_BASE64 = process.env.DYNAMIC_PUBLIC_KEY_BASE64;

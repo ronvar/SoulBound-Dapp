@@ -19,8 +19,11 @@ export const NftsSection: React.FC<NftsSectionProps> = ({ type }) => {
     loadingAllMintedTokens,
     loadingUserMintedTokens,
   } = useMintedTokens();
-  const { primaryWallet, isAuthenticated, setShowLinkNewWalletModal, setShowAuthFlow } =
-    useDynamicContext();
+  const {
+    primaryWallet,
+    isAuthenticated,
+    setShowLinkNewWalletModal,
+  } = useDynamicContext();
   const { fetchMintedTokens, fetchUserMintedTokens } = useMintedTokens();
   const [refreshingData, setRefreshingData] = useState(false);
   const [selectedTokens, setSelectedTokens] = useState<NftDetails[]>(

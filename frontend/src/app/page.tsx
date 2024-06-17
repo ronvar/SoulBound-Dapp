@@ -1,12 +1,9 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
 import DynamicWrapper from "@/contextWrappers/dynamicWrapper";
 import dotenv from "dotenv";
-import { Center, Container, MantineProvider } from "@mantine/core";
+import { Container, MantineProvider } from "@mantine/core";
 import Layout from "./components/common/AppLayout";
 import Sidebar from "./components/common/Sidebar";
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { AuthProvider } from "@/contextWrappers/authContext";
 import HomePage from "./components/common/Home";
 

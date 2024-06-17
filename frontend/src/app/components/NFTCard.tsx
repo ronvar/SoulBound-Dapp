@@ -1,6 +1,5 @@
 import { Box, Stack, Text, Image, createStyles } from "@mantine/core";
 import React from "react";
-import useScreenSize from "../../hooks/useScreenSize";
 import { NftDetails } from "@/types/nft";
 
 const DEFAULT_BANNER =
@@ -44,9 +43,7 @@ const useStyles = createStyles((theme) => {
 type CollectionCardProps = {
   token: NftDetails;
 };
-const NftCard: React.FC<CollectionCardProps> = ({
-  token
-}) => {
+const NftCard: React.FC<CollectionCardProps> = ({ token }) => {
   const { classes } = useStyles();
   const dateString = new Date(token.timestamp * 1000).toDateString();
 
@@ -70,7 +67,10 @@ const NftCard: React.FC<CollectionCardProps> = ({
         spacing={0}
       >
         <Text variant="primary" weight={700} truncate>
-          Token ID: <Text weight={400} span>{token.tokenId}</Text>
+          Token ID:{" "}
+          <Text weight={400} span>
+            {token.tokenId}
+          </Text>
         </Text>
         <Text variant="primary" fz="sm" truncate>
           Txn Hash: {token.transactionHash}

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getUser, saveUser } from "../auth/user";
+import { getUser, saveUser } from "../../services/dataSources/user/user";
 import { User } from "../../types/user";
 
 export const getUserController = async (req: Request, res: Response) => {
@@ -19,7 +19,6 @@ export const saveUserController = async (req: Request, res: Response) => {
   if (!userId) return res.status(400).send("Unauthorized");
 
   let user: Partial<User> = req.body.user;
-  console.log("user", user);
   const saved = await saveUser(user);
   if (saved) {
     const payload = {

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@dynamic-labs/ethereum": "1.1.0-alpha.13",
+    "@dynamic-labs/ethereum": "^1.1.0-alpha.13",
     "@dynamic-labs/sdk-react-core": "^1.1.0-alpha.13",
     "@emotion/react": "^11.11.4",
     "@mantine/core": "^6.0.19",

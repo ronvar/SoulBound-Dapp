@@ -10,10 +10,7 @@ const NftGroup: React.FC<NftGroupProps> = ({ nfts }) => {
   return (
     <Stack w={"100%"} spacing={"md"}>
       {nfts.map((nft, idx) => (
-        <NftCard
-          key={`${nft.tokenId}-${idx}`}
-          token={nft}
-        />
+        <NftCard key={`${nft.tokenId}-${idx}`} token={nft} />
       ))}
     </Stack>
   );

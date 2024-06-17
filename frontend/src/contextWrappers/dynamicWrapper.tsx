@@ -37,7 +37,6 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({ children }) => {
 
 
   const onAuthSuccess = useCallback(async (args: any) => {
-    console.log('onAuthSuccess', args)
     const authToken = args.authToken;
     try {
       await signIn(authToken);
@@ -47,7 +46,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({ children }) => {
   }, []);
 
   const onWalletAdded = useCallback(async (args: any) => {
-    console.log('onWalletAdded', args)
+    // add wallet to user
     const walletAdded = args.wallet;
     const address = walletAdded.address as string;
     const authenticated = walletAdded.authenticated as boolean;
@@ -64,7 +63,7 @@ const DynamicWrapper: React.FC<DynamicWrapperProps> = ({ children }) => {
   }, [saveUser]);
 
   const onWalletRemoved = useCallback(async (removedWallet: any) => {
-    console.log('onWalletRemoved', removedWallet)
+    // remove wallet from user
     saveUser({ wallet_address: "" });
   }, [])
 

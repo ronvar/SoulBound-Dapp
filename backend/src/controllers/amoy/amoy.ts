@@ -89,9 +89,9 @@ export const getContractMintingEvents = async (
 
     eventsWithMetadata.push({
       timestamp: block.timestamp,
-      ownerAddress: ownerWalletAddress,
-      transactionHash,
-      tokenId,
+      owner_address: ownerWalletAddress,
+      transaction_hash: transactionHash,
+      token_id: tokenId,
       from: event.args?.from,
       to: event.args?.to,
     });
@@ -124,7 +124,8 @@ export const mintToken = async (
 
   let isValidSignature = false;
   try {
-    isValidSignature = verifySignature(message, signature) === walletAddress.toLowerCase();
+    isValidSignature =
+      verifySignature(message, signature) === walletAddress.toLowerCase();
   } catch (error) {
     console.error("Error verifying signature:", error);
   }
@@ -155,13 +156,13 @@ export const mintToken = async (
 
   const newEvents = await getContractMintingEvents(walletAddress);
   const matchingEvent = newEvents.find(
-    (event) => event.transactionHash === transactionHash
+    (event) => event.transaction_hash === transactionHash
   );
 
   if (!matchingEvent) {
     throw new Error("Transaction failed");
   }
-  
+
   return matchingEvent;
 };
 
@@ -169,4 +170,4 @@ export const getGasPriceEstimate = async () => {
   const provider = getProvider();
   const gasPrice = await provider.getGasPrice();
   return gasPrice;
-}
+};

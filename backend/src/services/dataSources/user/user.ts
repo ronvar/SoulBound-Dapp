@@ -1,5 +1,5 @@
-import { pgPool } from "../../services/dataSources/postgres/postgres";
-import { User } from "../../types/user";
+import { pgPool } from "../postgres/postgres";
+import { User } from "../../../types/user";
 
 export const getUser = async (
   user_id?: string,
@@ -8,10 +8,9 @@ export const getUser = async (
 ): Promise<User | undefined> => {
   if (!user_id && !dynamic_user_id && !email) {
     console.error("No user_id, dynamic_user_id, or email provided", {
-        user_id,
-        dynamic_user_id,
-        email,
-        
+      user_id,
+      dynamic_user_id,
+      email,
     });
     return undefined;
   }

@@ -84,15 +84,19 @@ const Layout = ({
           main: {
             maxWidth: `calc(100% - 100px)`,
             minHeight: `calc(100vh - ${headerToolbar ? 72 : 88}px)`,
-            paddingLeft: !sidebar ? theme.spacing.md : undefined
+            paddingLeft: !sidebar ? theme.spacing.md : undefined,
           },
-          
         })}
       >
         {ready && (
-          <Box w={"100%"} maw={"100%"} pl={100} style={{
-            position: "relative",
-          }}>
+          <Box
+            w={"100%"}
+            maw={"100%"}
+            pl={100}
+            style={{
+              position: "relative",
+            }}
+          >
             <Center>{children}</Center>
           </Box>
         )}

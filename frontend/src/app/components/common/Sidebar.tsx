@@ -1,13 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, Stack, createStyles, useMantineTheme } from "@mantine/core";
-import { PageSectionId, PageSections, SectionType } from "@/types/pageTypes";
+import React, { useCallback } from "react";
+import { Box, Stack, createStyles } from "@mantine/core";
+import { PageSectionId, PageSections } from "@/types/pageTypes";
 import { useAtom } from "jotai";
 import { selectedPageSectionAtom } from "@/atoms/pageAtoms";
 import useScreenSize from "@/hooks/useScreenSize";
-
-type SettingsSidebarSection = {
-  label: string;
-};
 
 type StyleProps = {
   showSidebar: boolean;
@@ -54,15 +50,15 @@ const Sidebar = () => {
     showSidebar: !isMobile,
     isMobile,
   });
-  const [selectedSettingsSection, setSelectedSettingsSection] = useAtom(
+  const [selectedSection, setSelectedSection] = useAtom(
     selectedPageSectionAtom
   );
 
-  const handleNewSubsectionClicked = useCallback(
+  const handleNewSubSectionClicked = useCallback(
     (id: PageSectionId) => {
-      setSelectedSettingsSection(PageSections[id]);
+      setSelectedSection(PageSections[id]);
     },
-    [setSelectedSettingsSection]
+    [setSelectedSection]
   );
 
   return (
@@ -72,11 +68,11 @@ const Sidebar = () => {
           <Stack key={userSection.title} className="full-width" spacing={16}>
             <div
               className={`${classes.sidebarSectionLabel} ${
-                selectedSettingsSection.id === userSection.id
+                selectedSection.id === userSection.id
                   ? classes.selectedLabel
                   : ""
               }`}
-              onClick={handleNewSubsectionClicked.bind(this, userSection.id)}
+              onClick={handleNewSubSectionClicked.bind(this, userSection.id)}
             >
               {userSection.title}
             </div>

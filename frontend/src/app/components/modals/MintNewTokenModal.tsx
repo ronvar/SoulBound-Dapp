@@ -22,7 +22,7 @@ const MintNewTokenModal: React.FC<MintNewTokenModalProps> = ({
 
     setError(false);
     setProcessing(true);
-    console.log("Minting new token")
+    console.log("Minting new token");
     const newToken = await mintToken();
     if (!newToken) {
       setError(true);
@@ -31,15 +31,15 @@ const MintNewTokenModal: React.FC<MintNewTokenModalProps> = ({
   }, [processing, mintToken]);
 
   const refreshGasPrice = useCallback(async () => {
-      const newGasPrice = await getNewMintGasPriceEstimate();
-      setGasPrice(newGasPrice);
+    const newGasPrice = await getNewMintGasPriceEstimate();
+    setGasPrice(newGasPrice);
   }, []);
 
   useEffect(() => {
     if (opened) {
-        refreshGasPrice();
+      refreshGasPrice();
     }
-  }, [opened, refreshGasPrice])
+  }, [opened, refreshGasPrice]);
 
   return (
     <Modal

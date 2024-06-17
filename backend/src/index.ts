@@ -1,8 +1,4 @@
-import express, { Express, Request, Response, Router } from "express";
-import dotenv from "dotenv";
-import {
-  fetchTokenDetailsByWalletAddress,
-} from "./controllers/amoy/amoy";
+import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { config } from "dotenv";
@@ -23,12 +19,8 @@ const corsOptions: cors.CorsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-app.use("/user", user)
+app.use("/user", user);
 app.use("/verify", auth);
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
 
 const server = app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

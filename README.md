@@ -78,6 +78,8 @@ Then please run this command on the other terminal to start the frontend Next.JS
   npm run dev
 ```
 
+In your browser, head over to `http://localhost:3000` to view the app.
+
 ## Further Improvements
 
 - Minting an NFT: there is currently an issue creating a signed transaction to mint an NFT using the user's own wallet address to pay the gas price. While the UI allows the user to check the gas price and attempt to mint, the backend will not succeed.
