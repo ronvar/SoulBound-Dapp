@@ -46,14 +46,11 @@ const useMintedTokens = (fetchData?: boolean) => {
     //
     if (authenticated && user?.wallet_address && primaryWallet) {
       try {
-        const { message, signature } = await getSignature();
         const newToken = await mintNewToken(
           user.wallet_address,
-          message,
-          signature,
         );
 
-        if (newToken?.to === user.wallet_address) {
+        if (newToken?.to.toLowerCase() === user.wallet_address.toLowerCase()) {
           fetchUserMintedTokens(true);
         } else {
           console.error("Token minted but not sent to user");
@@ -70,7 +67,7 @@ const useMintedTokens = (fetchData?: boolean) => {
         primaryWallet,
       });
     }
-  }, [authenticated, user, setUserMintedTokens]);
+  }, [authenticated, user, primaryWallet, setUserMintedTokens]);
 
   const fetchMintedTokens = useCallback(
     async (forceUpdate?: boolean) => {

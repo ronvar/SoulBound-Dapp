@@ -31,14 +31,17 @@ export const mintNewNFTConroller = async (
   res: Response<any, Record<string, any>>
 ): Promise<Response<any, Record<string, any>>> => {
   const userWalletAddress = (req.body.wallet_address as string) || undefined;
-  const userMessage = (req.body.message as string) || undefined;
-  const userSignature = (req.body.signature as string) || undefined;
 
-  if (!userWalletAddress || !userMessage || !userSignature) {
+  if (!userWalletAddress) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
-  const nft = await mintToken(userWalletAddress, userSignature, userMessage);
+  const nft = await mintToken(userWalletAddress);
+
+  if (!nft) {
+    return res.status(500).json({ message: "Error minting NFT" });
+  }
+
   const payload = {
     data: {
       // token_id returns as a hex string

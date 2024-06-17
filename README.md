@@ -52,6 +52,7 @@ PGPORT=
 PGUSER=
 PGDATABASE=
 PGPASSWORD=
+DAPP_WALLET=
 ```
 
 The FRONTEND environment file has the variables:

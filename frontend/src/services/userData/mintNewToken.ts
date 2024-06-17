@@ -4,14 +4,10 @@ import dappApi from "@/utils/api/fetcher";
 
 export const mintNewToken = async (
   address: string,
-  message: string,
-  signature: string
 ): Promise<NftDetails | undefined> => {
   try {
     const body = {
       wallet_address: address,
-      message,
-      signature,
     };
     const response = await dappApi.post<{ data: NftEventWithMetadata }>(
       `/user/mint`,
