@@ -85,7 +85,7 @@ In your browser, head over to `http://localhost:3000` to view the app.
 
 ## Further Improvements
 
-- Minting an NFT: there is currently an issue creating a signed transaction to mint an NFT using the user's own wallet address to pay the gas price. While the UI allows the user to check the gas price and attempt to mint, the backend will not succeed.
+- Minting an NFT client-side: Currently, the only way to mint an NFT is using the backend. Client-side transactions were not completed in time and could be made a feature in future iterations.
 
 - Logging Out/Refreshing Page: Less priority was given to a user logging out/refreshing the page and hydrating the user from local storage and cookies so this can cause issues. In a production environment this would be stablized and made robust to ensure fluidity and security.
 
